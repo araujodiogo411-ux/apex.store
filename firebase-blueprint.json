@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "users": {
+      "fields": {
+        "uid": "string",
+        "name": "string",
+        "email": "string",
+        "role": "string"
+      }
+    },
+    "products": {
+      "fields": {
+        "id": "string",
+        "name": "string",
+        "description": "string",
+        "images": "array",
+        "videos": "array",
+        "category": "string",
+        "price": "number?",
+        "createdAt": "timestamp"
+      }
+    },
+    "reviews": {
+      "fields": {
+        "id": "string",
+        "productId": "string",
+        "userId": "string",
+        "userName": "string",
+        "rating": "number",
+        "comment": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "samples": {
+      "fields": {
+        "id": "string",
+        "imageUrl": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "settings": {
+      "fields": {
+        "whatsapp": "string",
+        "email": "string",
+        "instagram": "string",
+        "linkAction": "string"
+      }
+    }
+  }
+}

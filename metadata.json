@@ -1,0 +1,6 @@
+{
+  "name": "APEX",
+  "description": "Plataforma profissional e moderna de e-commerce e amostras APEX, com painel de administração, gerenciamento de produtos, amostras, avaliações e configurações.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
