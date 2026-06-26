@@ -97,6 +97,8 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
       console.error(err);
       if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
         setError("Credenciais incorretas ou usuário não cadastrado.");
+      } else if (err.code === "auth/operation-not-allowed") {
+        setError("O método de login por E-mail e Senha não está ativado no console do Firebase. Ative-o na aba Authentication > Sign-in method.");
       } else {
         setError(err.message || "Erro ao realizar login.");
       }
@@ -149,6 +151,10 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
       console.error(err);
       if (err.code === "auth/email-already-in-use") {
         setError("Este e-mail já está sendo utilizado.");
+      } else if (err.code === "auth/operation-not-allowed") {
+        setError("O método de cadastro por E-mail e Senha não está ativado no console do Firebase. Ative-o em Authentication > Sign-in method.");
+      } else if (err.message && err.message.includes("permission-denied")) {
+        setError("Erro do Firestore: Permissão negada para salvar o perfil do usuário. Verifique as regras de segurança.");
       } else {
         setError(err.message || "Erro ao criar conta.");
       }
@@ -194,7 +200,21 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
       onAuthSuccess(profile);
     } catch (err: any) {
       console.error(err);
-      setError("Erro ao autenticar com o Google. Certifique-se de estar em uma aba externa para melhor suporte.");
+      let errorMessage = "Erro ao autenticar com o Google.";
+      if (err.code === "auth/operation-not-allowed") {
+        errorMessage = "O provedor do Google não está ativado no console do Firebase. Vá para Authentication > Sign-in method e ative o Google.";
+      } else if (err.code === "auth/unauthorized-domain") {
+        errorMessage = `Este domínio não está autorizado no console do Firebase. Adicione o domínio do app nas configurações de domínios autorizados do Firebase Auth.`;
+      } else if (err.code === "auth/popup-blocked") {
+        errorMessage = "O pop-up de login foi bloqueado pelo seu navegador. Por favor, ative os pop-ups ou abra o aplicativo em uma nova aba.";
+      } else if (err.code === "auth/popup-closed-by-user") {
+        errorMessage = "O pop-up foi fechado antes de concluir o login com o Google.";
+      } else if (err.message && err.message.includes("permission-denied")) {
+        errorMessage = "Login realizado, mas sem permissão para ler/gravar o perfil do usuário no Firestore.";
+      } else if (err.message) {
+        errorMessage = `Erro de Autenticação: ${err.message} (Código: ${err.code || "desconhecido"})`;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
